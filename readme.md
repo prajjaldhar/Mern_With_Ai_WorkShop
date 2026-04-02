@@ -1,4 +1,4 @@
----
+
 # 🚀 MERN With AI Workshop
 
 <p align="center">
@@ -8,7 +8,6 @@
 <img src="https://img.shields.io/github/issues/prajjaldhar/Mern_With_Ai_WorkShop?style=for-the-badge" />
 <img src="https://img.shields.io/github/last-commit/prajjaldhar/Mern_With_Ai_WorkShop?style=for-the-badge" />
 </p>
----
 
 ## 📖 Overview
 
