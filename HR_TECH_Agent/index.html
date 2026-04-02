@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company AI Assistant</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="bg-slate-100 min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col p-5">
+      <h2 class="text-2xl font-bold mb-8">🤖 AI Desk</h2>
+
+      <nav class="flex flex-col gap-4 text-sm">
+        <div class="hover:bg-slate-700 p-2 rounded cursor-pointer">
+          Dashboard
+        </div>
+        <div class="hover:bg-slate-700 p-2 rounded cursor-pointer">
+          HR Assistant
+        </div>
+        <div class="hover:bg-slate-700 p-2 rounded cursor-pointer">
+          Tech Support
+        </div>
+        <div class="hover:bg-slate-700 p-2 rounded cursor-pointer">Tools</div>
+      </nav>
+
+      <div class="mt-auto text-xs text-slate-400">© 2026 Company AI</div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+      <!-- Header -->
+      <div
+        class="bg-white shadow rounded-xl p-4 mb-6 flex justify-between items-center"
+      >
+        <h1 class="text-xl font-semibold">Employee AI Assistant</h1>
+        <span class="text-sm text-green-500 font-bold">Online</span>
+      </div>
+
+      <!-- Chat Container -->
+      <div class="bg-white shadow rounded-xl p-6 flex flex-col h-[70vh]">
+        <!-- Chat Messages -->
+        <div id="chatBox" class="flex-1 overflow-y-auto space-y-4 mb-4"></div>
+
+        <!-- Input Section -->
+        <div class="flex gap-2">
+          <input
+            id="query"
+            type="text"
+            placeholder="Ask HR, Tech or Tools..."
+            class="flex-1 border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+
+          <button
+            onclick="ask()"
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Script -->
+    <script>
+      window.onload = () => {
+        const chatBox = document.getElementById("chatBox");
+
+        const systemMsg = document.createElement("div");
+        systemMsg.className = "text-center text-slate-400 text-sm";
+        systemMsg.innerText = "Start a conversation with the AI Assistant.";
+
+        chatBox.appendChild(systemMsg);
+      };
+      
+      async function ask() {
+        const input = document.getElementById("query");
+        const chatBox = document.getElementById("chatBox");
+
+        const query = input.value;
+        if (!query) return;
+
+        // Add user message
+        const userMsg = document.createElement("div");
+        userMsg.className = "text-right";
+        userMsg.innerHTML = `
+          <p class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg">
+            ${query}
+          </p>
+        `;
+        chatBox.appendChild(userMsg);
+
+        input.value = "";
+
+        // Fetch response
+        const res = await fetch("http://localhost:3000/ask", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query }),
+        });
+
+        const data = await res.json();
+
+        // Add bot response
+        const botMsg = document.createElement("div");
+        botMsg.className = "text-left";
+        botMsg.innerHTML = `
+          <p class="inline-block bg-slate-200 px-4 py-2 rounded-lg">
+            ${data.response}
+          </p>
+        `;
+        chatBox.appendChild(botMsg);
+
+        // Auto scroll
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    </script>
+  </body>
+</html>

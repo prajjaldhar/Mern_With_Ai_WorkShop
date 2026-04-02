@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Gemini Agent</title>
+  </head>
+  <body>
+    <h1>🤖 Gemini Agent Bot</h1>
+
+    <input id="query" placeholder="Ask something" />
+    <button onclick="ask()">Ask Agent</button>
+
+    <p id="response"></p>
+
+    <script>
+      async function ask() {
+        const query = document.getElementById("query").value;
+
+        const res = await fetch("http://localhost:3000/ask", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query }),
+        });
+
+        const data = await res.json();
+        document.getElementById("response").innerText = data.response;
+      }
+    </script>
+  </body>
+</html>
